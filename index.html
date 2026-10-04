@@ -50,6 +50,23 @@
     .candidates { flex-wrap:wrap; overflow-x:visible; }
     .cand-card { min-width:0; flex:0 0 auto; }
   }
+
+  .main-tabs { display:flex; gap:8px; padding:0 10px; margin-top:10px; }
+  .main-tabs button { flex:1; border:none; background:#fff; border-radius:10px 10px 0 0; padding:10px; font-size:13px; font-weight:700; color:#777; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .main-tabs button.active { background:#1a2340; color:#fff; }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+  .theme-chart-wrap { position:relative; height:280px; width:100%; margin-bottom:10px; }
+  .theme-table { width:100%; border-collapse:collapse; font-size:11.5px; }
+  .theme-table th, .theme-table td { padding:6px 5px; text-align:right; border-bottom:1px solid #eee; white-space:nowrap; }
+  .theme-table th:first-child, .theme-table td:first-child { text-align:left; position:sticky; left:0; background:#fff; }
+  .theme-table .pos { color:#b3241c; }
+  .theme-table .neg { color:#0b6b3a; }
+  .theme-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .news-box { background:#fff; border-radius:10px; padding:12px 14px; box-shadow:0 1px 3px rgba(0,0,0,.08); margin-top:12px; font-size:12.5px; line-height:1.8; }
+  .news-box h3 { margin:0 0 8px; font-size:14px; }
+  .news-box ul { margin:6px 0; padding-left:18px; }
+  .news-box .src { color:#999; font-size:11px; }
 </style>
 </head>
 <body>
@@ -57,7 +74,11 @@
   <h1>踏み上げ候補スクリーニング（プロトタイプ）</h1>
   <p>対象日: 20261002 ／ データ: J-Quants API（日々公表信用取引残高 × 株価） ／ 半自動方針＝アラートのみ・発注は手動</p>
 </header>
-<div class="layout">
+<div class="main-tabs">
+  <button data-tab="fumiage" class="active">踏み上げ候補</button>
+  <button data-tab="theme">セキュリティ・テーマ全体</button>
+</div>
+<div class="layout tab-panel active" id="tab-fumiage">
   <div class="chart-panel">
     <h2 id="chart-title">—</h2>
     <div class="sub" id="chart-sub"></div>
@@ -76,6 +97,32 @@
     <div class="chart-wrap"><canvas id="priceChart"></canvas></div>
   </div>
   <div class="candidates" id="candidates"></div>
+</div>
+<div class="layout tab-panel" id="tab-theme">
+  <div class="chart-panel">
+    <h2>サイバーセキュリティ関連銘柄 騰落率ランキング</h2>
+    <div class="sub">直近1ヶ月の騰落率で降順ソート（2026-10-02時点）</div>
+    <div class="theme-chart-wrap"><canvas id="themeChart"></canvas></div>
+    <div class="theme-table-wrap">
+      <table class="theme-table" id="theme-table"></table>
+    </div>
+  </div>
+  <div class="news-box">
+  <h3>関連ニュース：2026年9〜10月は大型インシデントが連発</h3>
+  <p>国内で著名企業を巻き込むサイバー被害の公表が、この1〜2ヶ月で立て続けに起きています。</p>
+  <ul>
+    <li><strong>タイムズカー</strong>：約660万アカウント流出、うち約160万件は本人確認書類も含む（9月）</li>
+    <li><strong>京王グループ</strong>：ランサムウェア攻撃でグループ会社の営業システムに障害（9月）</li>
+    <li><strong>セイコーマート</strong>：約57万アカウントの個人情報流出の可能性（9月）</li>
+    <li><strong>東京メトロ</strong>：約5.9万件のメールアドレス漏えいの可能性（9月）</li>
+    <li><strong>デジタル庁（GSS）</strong>：約24.6万件に漏えいの可能性（9月）</li>
+    <li><strong>アスクル</strong>：ランサムウェア攻撃で物流サービスの一部停止（10月）</li>
+  </ul>
+  <p>政策面では、高市政権が「積極的サイバー防御」「経済安全保障」を重要政策に掲げており、政府調達での国産セキュリティ製品への回帰が進むとの見方が複数の市場関係者から出ています。FFRIセキュリティは官公庁・防衛向け実績からこの政策テーマの「本命銘柄」と位置づけられることが多いです。</p>
+  <p><strong>見立て：</strong>今回スキャンした11銘柄中9銘柄が直近1ヶ月でプラス（うち大型株のトレンドマイクロも含む）という結果は、単発の投機ではなく、①相次ぐ実被害のニュースによる実需の高まり ②政策テーマとしての追い風、という2つの土台がある状態に見えます。ただし銘柄ごとの強さの中身は異なり、ソリトンシステムズのように52週高値近辺を地道に切り上げているものもあれば、FFRIセキュリティ・アズジェントのように52週高値からまだ-38〜-42%の水準から急反発している（＝踏み上げ色が強い）ものもあります。</p>
+  <p class="src">出典：マイナビニュース、セキュリティ対策Lab、イープライズ、ダイヤモンド・ザイ、Bridge-salon等の報道・分析記事を基にMulmoClaudeがまとめ。投資判断は必ずご自身で。</p>
+</div>
+
 </div>
 <footer>
   ※ これは機械的スクリーニングのプロトタイプです。投資推奨ではありません。材料・出来高・チャートの形は必ず自分の目で確認してください。<br>
@@ -191,6 +238,64 @@ document.querySelectorAll("#period-toggle button[data-period]").forEach(btn => {
 
 renderCandidateList();
 render();
+
+// --- テーマ全体タブ ---
+const THEME_DATA = [{"code": "3692", "name": "ＦＦＲＩセキュリティ", "market": "グロース", "last_close": 7600.0, "last_date": "2026-10-02", "chg_1m": 35.0, "chg_3m": 59.2, "chg_6m": 17.5, "from_52w_high": -41.9, "shrt_out": 158600.0, "shrt_chg": 22000.0}, {"code": "4288", "name": "アズジェント", "market": "スタンダード", "last_close": 581.0, "last_date": "2026-10-02", "chg_1m": 27.7, "chg_3m": 42.4, "chg_6m": 2.5, "from_52w_high": -38.0, "shrt_out": 208900.0, "shrt_chg": 137600.0}, {"code": "4704", "name": "トレンドマイクロ", "market": "プライム", "last_close": 6798.0, "last_date": "2026-10-02", "chg_1m": 13.4, "chg_3m": 13.6, "chg_6m": 27.4, "from_52w_high": -19.1, "shrt_out": null, "shrt_chg": null}, {"code": "2326", "name": "デジタルアーツ", "market": "プライム", "last_close": 5080.0, "last_date": "2026-10-02", "chg_1m": 10.6, "chg_3m": 37.1, "chg_6m": -2.9, "from_52w_high": -36.5, "shrt_out": null, "shrt_chg": null}, {"code": "3040", "name": "ソリトンシステムズ", "market": "プライム", "last_close": 2648.0, "last_date": "2026-10-02", "chg_1m": 8.8, "chg_3m": 36.6, "chg_6m": 49.7, "from_52w_high": -2.6, "shrt_out": null, "shrt_chg": null}, {"code": "153A", "name": "カウリス", "market": "グロース", "last_close": 1544.0, "last_date": "2026-10-02", "chg_1m": 8.0, "chg_3m": 31.1, "chg_6m": 35.6, "from_52w_high": -39.8, "shrt_out": null, "shrt_chg": null}, {"code": "3968", "name": "セグエグループ", "market": "プライム", "last_close": 692.0, "last_date": "2026-10-02", "chg_1m": 2.7, "chg_3m": 22.5, "chg_6m": 36.0, "from_52w_high": -13.6, "shrt_out": null, "shrt_chg": null}, {"code": "4493", "name": "サイバーセキュリティクラウド", "market": "グロース", "last_close": 1973.0, "last_date": "2026-10-02", "chg_1m": 1.7, "chg_3m": 12.1, "chg_6m": 12.9, "from_52w_high": -5.6, "shrt_out": null, "shrt_chg": null}, {"code": "2321", "name": "ソフトフロントホールディングス", "market": "グロース", "last_close": 139.0, "last_date": "2026-10-02", "chg_1m": 0.0, "chg_3m": 6.1, "chg_6m": -36.5, "from_52w_high": -66.1, "shrt_out": null, "shrt_chg": null}, {"code": "3788", "name": "ＧＭＯグローバルサイン・ホールディングス", "market": "プライム", "last_close": 1967.0, "last_date": "2026-10-02", "chg_1m": -8.0, "chg_3m": 0.2, "chg_6m": -0.4, "from_52w_high": -20.4, "shrt_out": null, "shrt_chg": null}, {"code": "4498", "name": "サイバートラスト", "market": "グロース", "last_close": 1114.0, "last_date": "2026-10-02", "chg_1m": -19.0, "chg_3m": 1.5, "chg_6m": -6.9, "from_52w_high": -27.8, "shrt_out": null, "shrt_chg": null}];
+let themeChart = null;
+
+function renderTheme() {
+  const labels = THEME_DATA.map(r => r.name.replace(/\s+/g, ""));
+  const data1m = THEME_DATA.map(r => r.chg_1m);
+  if (themeChart) themeChart.destroy();
+  themeChart = new Chart(document.getElementById("themeChart"), {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: "直近1ヶ月騰落率(%)",
+        data: data1m,
+        backgroundColor: data1m.map(v => v >= 0 ? "#b3241c" : "#0b6b3a"),
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { size: 10 }, callback: v => v + "%" } },
+        y: { ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+
+  const table = document.getElementById("theme-table");
+  const fmt = v => v === null || v === undefined ? "—" : (v > 0 ? "+" : "") + v + "%";
+  const cls = v => v === null || v === undefined ? "" : (v >= 0 ? "pos" : "neg");
+  let html = "<tr><th>銘柄</th><th>市場</th><th>1ヶ月</th><th>3ヶ月</th><th>6ヶ月</th><th>52週高値比</th><th>本日空売り残</th></tr>";
+  THEME_DATA.forEach(r => {
+    html += `<tr>
+      <td>${r.name}（${r.code}）</td>
+      <td>${r.market}</td>
+      <td class="${cls(r.chg_1m)}">${fmt(r.chg_1m)}</td>
+      <td class="${cls(r.chg_3m)}">${fmt(r.chg_3m)}</td>
+      <td class="${cls(r.chg_6m)}">${fmt(r.chg_6m)}</td>
+      <td class="${cls(r.from_52w_high)}">${fmt(r.from_52w_high)}</td>
+      <td>${r.shrt_out ? Math.round(r.shrt_out).toLocaleString() + "株" + (r.shrt_chg ? `(${r.shrt_chg>0?"+":""}${Math.round(r.shrt_chg).toLocaleString()})` : "") : "—"}</td>
+    </tr>`;
+  });
+  table.innerHTML = html;
+}
+
+document.querySelectorAll(".main-tabs button[data-tab]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".main-tabs button[data-tab]").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+    if (btn.dataset.tab === "theme" && !themeChart) renderTheme();
+  });
+});
 </script>
 </body>
 </html>
